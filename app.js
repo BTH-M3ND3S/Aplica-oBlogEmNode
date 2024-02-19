@@ -17,12 +17,15 @@ const passport = require("passport")
 require("./config/auth")(passport)
 const { eAdmin } = require("./helpers/eAdmin")
 require('dotenv').config()
-const session = require('express-session');
-const MongoDBStore = require('connect-mongodb-session')(session);
-const sessionSecret = process.env.SESSION_SECRET || 'chave-padrao-secreta';
 
 //Configurações
 //Sessão
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: true,
+    saveUninitialized: true
+}))
+
 app.use(passport.initialize())
 app.use(passport.session())
 app.use(flash())
@@ -41,38 +44,15 @@ app.use(bodyParser.json())
 app.engine('handlebars', handlebars.engine({ defaultLayout: 'main', extname: 'handlebars' }))
 app.set('view engine', 'handlebars');
 //mongoose
-
 mongoose.Promise = global.Promise;
 
-const remoteMongoURI = process.env.MONGO_URI;
-
-mongoose.connect(remoteMongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => {
-    console.log('Conectado com o MongoDB remoto');
-  })
-  .catch((err) => {
-    console.error('Erro ao se conectar com o MongoDB remoto:', err);
-  });
-
-const store = new MongoDBStore({
-  uri: remoteMongoURI,
-  collection: 'sessions' // Nome da coleção onde as sessões serão armazenadas no MongoDB
-});
-
-store.on('error', function (error) {
-  console.error('Erro no MongoDB Session Store:', error);
-});
-
-// Configuração do express-session
-app.use(session({
-  secret: sessionSecret,
-  resave: false,
-  saveUninitialized: true,
-  store: store,
-  cookie: {
-    maxAge: 1000 * 60 * 60 * 24 // Configuração do tempo de vida do cookie da sessão (1 dia)
-  }
-}));
+mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => {
+        console.log('Conectado com o MongoDB');
+    })
+    .catch((err) => {
+        console.error('Erro ao se conectar com o MongoDB:', err);
+    });
 
 // Public
 app.use(express.static(path.join(__dirname, "public")))
