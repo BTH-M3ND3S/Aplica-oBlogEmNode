@@ -46,13 +46,15 @@ app.set('view engine', 'handlebars');
 //mongoose
 mongoose.Promise = global.Promise;
 
-mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => {
-        console.log('Conectado com o MongoDB');
-    })
-    .catch((err) => {
-        console.error('Erro ao se conectar com o MongoDB:', err);
-    });
+const remoteMongoURI = process.env.MONGO_URI;
+
+mongoose.connect(remoteMongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => {
+    console.log('Conectado com o MongoDB remoto');
+  })
+  .catch((err) => {
+    console.error('Erro ao se conectar com o MongoDB remoto:', err);
+  });
 
 // Public
 app.use(express.static(path.join(__dirname, "public")))
