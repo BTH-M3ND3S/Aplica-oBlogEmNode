@@ -1,0 +1,33 @@
+<div class="p-4 mb-4 bg-body-tertiary rounded-3">
+    <div class="container-fluid py-5">
+        <h1 class="display-5 fw-bold">Bem Vindo ao Blog do Mendes!!</h1>
+        <p class="col-md-8 fs-4">Explore um mundo de ideias, descobertas e reflexões aqui no meu espaço virtual. No Blog
+            do Mendes, compartilho pensamentos, experiências e histórias que espero inspirarem e encantarem você.
+            Junte-se a mim nessa jornada de conhecimento e diversão, onde cada post é uma nova oportunidade de aprender
+            e se surpreender. Vamos criar memórias juntos no universo digital do Blog do Mendes. Seja bem-vindo e
+            aproveite a leitura!
+        </p>
+        <button class="btn btn-primary btn-lg" type="button">Crie uma conta</button>
+    </div>
+</div>
+<hr>
+<h2>Postagens recentes: </h2>
+
+{{#each postagem}}
+<div class="card mt-4">
+    <div class="card-body">
+       
+        <h3>Titulo: {{titulo}}</h3>
+        <p>Descrição: {{descricao}}</p>
+        <a href="/postagem/{{slug}}"><button class="btn btn-success">Leia Mais</button></a>
+        <br>
+        <hr>
+        <small>Categoria: {{categoria.nome}}</small>
+         <br>
+        <small>Data De Publicação: {{data}}</small>
+    </div>
+</div>
+{{else}}
+<h5>Nenhuma Postagem</h5>
+
+{{/each}}
